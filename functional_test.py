@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import unittest
 
 class NewVisitorTest(unittest.TestCase):
@@ -12,23 +13,40 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.quit()
 
     def test_that_he_can_start_a_list_and_retrieve_it_later(self):
-        # He opened the browser to visit the To-Do application on the site by typing the address
+        # He opened the browser to visit the To-Do application on the site by
+        # typing the address
         self.browser.get('http://localhost:8000')
 
-        # The title appears as 'To-Do' on the browser window title bar
+        # The title appears as 'To-Do' on the browser window title bar and 
+        # headinf of to-do
         self.assertIn('To-Do', self.browser.title)
-        self.fail('Finish the test!')
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('To-Do', header_text)
 
         # He is invited to enter a to-do item straight away
+        input_box = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(
+            input_box.get_attribute('placeholder'),
+            'Enter a To-Do item'
+        )
 
         # He types "Buy turbos" into a text box
+        input_box.send_keys('Buy Turbos')
 
         # When he hits enter, the page updates, and now the page lists
         # "1: Buy turbos" as an item in a to-do list
+        input_box.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        row = table.find_elements_by_tag_name('tr')
+        self.assertTrue(
+            any(row.text == '1: Buy Turbos' for row in rows)
+        )
 
         # There is still a text box inviting her to add another item. He
         # enters "Use turbos in my Nissan 240sx"
-
+        self.fail('Finish the tests!')
         # The page updates again, and now shows both items on his list
 
         # Bob wonders whether the site will remember her list. Then he sees

@@ -4,11 +4,15 @@
 </head>
 <body>
     <h1>Your To-Do list</h1>
-    <form action="/">
-        <input id="id_new_item" placeholder="Enter a To-Do item" />
-        <input type="button" value="submit">
+    <form action="/" method="POST">
+        {% csrf_token %}
+        <input name="item_text" id="id_new_item" placeholder="Enter a To-Do item" />
+        <button type="submit">Submit</button>
     </form>
     <table id="id_list_table">
+        <tr>
+            <td>1: {{ new_item_text }}</td>
+        </tr>
     </table>
 </body>
 </html>

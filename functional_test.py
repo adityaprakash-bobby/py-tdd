@@ -41,17 +41,36 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: Buy Turbos' for row in rows),
-            "New To-Do element did not appear in the table"
+        # self.assertTrue(
+        #     any(row.text == '1: Buy Turbos' for row in rows),
+        #     f"New To-Do element did not appear in the table. Contents were:\n{table.text}"
+        # )
+        self.assertIn(
+            '1: Buy Turbos',
+            [row.text for row in rows]
+        )
+        
+        # There is still a text box inviting him to add another item. He
+        # enters "Use turbos in my Nissan 240sx"
+        input_box = self.browser.find_element_by_id('id_new_item')
+        input_box.send_keys('Use turbos in my Nissan 240sx')
+        input_box.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+        # The page updates again, and now shows both items on his list
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(
+            '1: Buy Turbos',
+            [row.text for row in rows]
+        )
+        self.assertIn(
+            '2: Use turbos in my Nissan 240sx',
+            [row.text for row in rows]
         )
 
-        # There is still a text box inviting her to add another item. He
-        # enters "Use turbos in my Nissan 240sx"
         self.fail('Finish the tests!')
-        # The page updates again, and now shows both items on his list
-
-        # Bob wonders whether the site will remember her list. Then he sees
+        # Bob wonders whether the site will remember his list. Then he sees
         # that the site has generated a unique URL for him -- there is some
         # explanatory text to that effect.
 

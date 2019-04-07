@@ -13,7 +13,14 @@ class NewVisitorTest(unittest.TestCase):
         # Gracefully, quits the browser 
         self.browser.quit()
 
-    def test_that_he_can_start_a_list_and_retrieve_it_later(self):
+    def check_if_a_item_is_present_in_the_list(self, row_text):
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
+
+    def test_can_start_a_list_and_retrieve_it_later(self):
         # He opened the browser to visit the To-Do application on the site by
         # typing the address
         self.browser.get('http://localhost:8000')
@@ -39,16 +46,7 @@ class NewVisitorTest(unittest.TestCase):
         input_box.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        # self.assertTrue(
-        #     any(row.text == '1: Buy Turbos' for row in rows),
-        #     f"New To-Do element did not appear in the table. Contents were:\n{table.text}"
-        # )
-        self.assertIn(
-            '1: Buy Turbos',
-            [row.text for row in rows]
-        )
+        self.check_if_a_item_is_present_in_the_list('1: Buy Turbos')
         
         # There is still a text box inviting him to add another item. He
         # enters "Use turbos in my Nissan 240sx"
@@ -58,16 +56,8 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)
 
         # The page updates again, and now shows both items on his list
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn(
-            '1: Buy Turbos',
-            [row.text for row in rows]
-        )
-        self.assertIn(
-            '2: Use turbos in my Nissan 240sx',
-            [row.text for row in rows]
-        )
+        self.check_if_a_item_is_present_in_the_list('1: Buy Turbos')
+        self.check_if_a_item_is_present_in_the_list('2: Use turbos in my Nissan 240sx')
 
         self.fail('Finish the tests!')
         # Bob wonders whether the site will remember his list. Then he sees

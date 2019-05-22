@@ -16,30 +16,6 @@ class TestForHomePage(TestCase):
 
         _response = self.client.get('/')
         self.assertTemplateUsed(_response, 'home.html')
-    
-    def test_can_save_a_POST_request(self):
-
-        _response = self.client.post('/', data={'item_text':'A new item to add'})
-
-        self.assertEqual(1, Item.objects.count())
-        new_item_text = Item.objects.first()
-        self.assertEqual('A new item to add', new_item_text.text)
-    
-    def test_redirects_after_POST(self):
-
-        _response = self.client.post('/', data={'item_text':'A new item to add'})
-        self.assertEqual(_response.status_code, 302)
-        self.assertEqual(_response['location'], '/')
-
-    def test_displays_multiple_lists(self):
-
-        Item.objects.create(text='First Text')
-        Item.objects.create(text='Second Text')
-
-        _response = self.client.get('/')
-
-        self.assertIn('First Text', _response.content.decode())
-        self.assertIn('Second Text', _response.content.decode())
 
 class TestItemModel(TestCase):
     
@@ -60,3 +36,34 @@ class TestItemModel(TestCase):
         second_saved_item = saved_items[1] 
         self.assertEqual(first_saved_item.text, 'First ever item')
         self.assertEqual(second_saved_item.text, 'Second item')
+
+class ListViewTest(TestCase):
+
+    def test_uses_list_template(self):
+
+        _response = self.client.get('/lists/the-only-list-in-the-world/')
+        self.assertTemplateUsed(_response, 'list.html')
+
+    def test_displays_all_items(self):
+
+        Item.objects.create(text='First Item')
+        Item.objects.create(text='Second Item')
+
+        _response = self.client.get('/lists/the-only-list-in-the-world/')
+
+        self.assertContains(_response, 'First Item')
+        self.assertContains(_response, 'Second Item')
+
+class NewListTest(TestCase):
+
+    def test_can_save_a_POST_request(self):
+
+        self.client.post('/lists/new', data={'item_text':'A new item to add'})
+        self.assertEqual(1, Item.objects.count())
+        new_item = Item.objects.first()
+        self.assertEqual('A new item to add', new_item.text)
+
+    def test_redirects_after_POST(self):
+
+        _response = self.client.post('/lists/new', data={'item_text':'A new item to add'})
+        self.assertRedirects(_response, '/lists/the-only-list-in-the-world/') 

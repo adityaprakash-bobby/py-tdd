@@ -112,8 +112,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Alice starts a new list of her own, so she types down them
         input_box = self.browser.find_element_by_id('id_new_item')
-        input_box.send_keys('Buy milk')
-        time.sleep(5)
+        input_box.send_keys('Buy Milk')
         input_box.send_keys(Keys.ENTER)
         self.wait_for_a_item_present_in_the_list('1: Buy Milk')
 

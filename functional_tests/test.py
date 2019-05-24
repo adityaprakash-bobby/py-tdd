@@ -75,7 +75,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.browser.get(self.live_server_url)
 
         # The title appears as 'To-Do' on the browser window title bar and 
-        # headinf of to-do
+        # heading of to-do
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('To-Do', header_text)

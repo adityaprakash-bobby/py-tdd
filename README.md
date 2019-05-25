@@ -20,7 +20,7 @@ python3 -m venv virtualenv
 
 # run tests
 #   e2e test:
-./virtualenv/bin/python manage.py test funtional_tests
+./virtualenv/bin/python manage.py test functional_tests
 #   unit tests:
 ./virtualenv/bin/python manage.py test lists
 ```

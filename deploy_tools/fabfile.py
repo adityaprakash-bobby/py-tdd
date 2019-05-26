@@ -6,7 +6,7 @@ REPO_URL = 'https://github.com/adityaprakash-bobby/py-tdd.git'
 
 def _get_latest_source():
 
-    if exists(.git):
+    if exists('.git'):
         run('git fetch')
     else:
         run(f'git clone {REPO_URL} .')

@@ -2,8 +2,7 @@ from django.test import TestCase
 from django.urls import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
-
-from .models import Item, List
+from lists.models import Item, List
 from lists.views import home_page
 
 class TestForHomePage(TestCase):
@@ -16,36 +15,6 @@ class TestForHomePage(TestCase):
 
         _response = self.client.get('/')
         self.assertTemplateUsed(_response, 'home.html')
-
-class TestItemAndListModels(TestCase):
-    
-    def test_saving_and_retrieving_elements(self):
-        
-        list_ob = List()
-        list_ob.save()
-
-        first_item = Item()
-        first_item.text = 'First ever item'
-        first_item.list = list_ob
-        first_item.save()
-
-        second_item = Item()
-        second_item.text = 'Second item'
-        second_item.list = list_ob
-        second_item.save()
-
-        saved_list = List.objects.first()
-        self.assertEqual(saved_list, list_ob)
-
-        saved_items = Item.objects.all()
-        self.assertEqual(2, saved_items.count())
-
-        first_saved_item = saved_items[0]
-        second_saved_item = saved_items[1] 
-        self.assertEqual(first_saved_item.text, 'First ever item')
-        self.assertEqual(first_saved_item.list, list_ob)
-        self.assertEqual(second_saved_item.text, 'Second item')
-        self.assertEqual(second_saved_item.list, list_ob)
 
 class ListViewTest(TestCase):
 

@@ -1,5 +1,6 @@
 from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
+import time
 
 class ListItemValidationTest(FunctionalTest):
     
@@ -21,7 +22,7 @@ class ListItemValidationTest(FunctionalTest):
         self.browser.find_element_by_id('id_new_item').send_keys("Buy Turbos")
         self.browser.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
         self.wait_for_a_item_present_in_the_list('1: Buy Turbos')
-        
+
         # Perversely, he again tries to submit an empty list item, and again
         # comes across same error message on the lists page.
         self.browser.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
@@ -33,5 +34,5 @@ class ListItemValidationTest(FunctionalTest):
         # She then correctly inserts the data
         self.browser.find_element_by_id('id_new_item').send_keys("Buy House")
         self.browser.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
+        self.wait_for_a_item_present_in_the_list("2: Buy House")
         self.wait_for_a_item_present_in_the_list("1: Buy Turbos")
-        self.wait_for_a_item_present_in_the_list("1: Buy House")

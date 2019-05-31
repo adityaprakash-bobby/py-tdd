@@ -20,7 +20,7 @@ def views_list(request, list_id):
             item = Item(text=request.POST['item_text'], list=list_ob)
             item.full_clean()
             item.save()
-            return redirect(f'/lists/{list_id}/')    
+            return redirect(list_ob)    
 
         except ValidationError as e:
             
@@ -50,10 +50,10 @@ def new_list(request):
             'error': error
         })
     
-    return redirect(f'/lists/{list_ob.id}/')
+    return redirect(list_ob)
 
 def add_item(request, list_id):
     
     list_ob = List.objects.get(id=list_id)
     Item.objects.create(text=request.POST['item_text'], list=list_ob)
-    return redirect(f'/lists/{list_ob.id}/')
+    return redirect(list_ob)

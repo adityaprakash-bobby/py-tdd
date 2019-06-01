@@ -14,46 +14,36 @@ def home_page(request):
 def views_list(request, list_id):
     
     list_ob = List.objects.get(id=list_id)
-    error = None
+    form = ItemForm()
 
     if request.method == 'POST':
 
-        try:
+        form = ItemForm(data=request.POST)
+        
+        if form.is_valid():
 
-            item = Item(text=request.POST['text'], list=list_ob)
-            item.full_clean()
-            item.save()
-            return redirect(list_ob)    
+            Item.objects.create(text=request.POST['text'], list=list_ob)
+            return redirect(list_ob)
 
-        except ValidationError as e:
-            
-            error = "You can't have an empty list item"
-            
     return render(request, 'list.html', {
         'list' : list_ob,
-        'error' : error
+        'form' : form,
     })
 
 def new_list(request):
 
-    list_ob = List.objects.create()
-    item = Item.objects.create(text=request.POST['text'], list=list_ob)
-    
-    try:
+    form = ItemForm(data=request.POST)
 
-        item.full_clean()
-        item.save()
-    
-    except ValidationError as e:
-
-        list_ob.delete()
-        error = "You can't have an empty list item"
+    if form.is_valid():
         
-        return render(request, 'home.html', {
-            'error': error
-        })
+        list_ob = List.objects.create()
+        Item.objects.create(text=request.POST['text'], list=list_ob)
+
+        return redirect(list_ob)
     
-    return redirect(list_ob)
+    return render(request, 'home.html', {
+        'form': form,
+    })
 
 def add_item(request, list_id):
     

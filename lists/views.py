@@ -20,7 +20,7 @@ def views_list(request, list_id):
 
         try:
 
-            item = Item(text=request.POST['item_text'], list=list_ob)
+            item = Item(text=request.POST['text'], list=list_ob)
             item.full_clean()
             item.save()
             return redirect(list_ob)    
@@ -37,7 +37,7 @@ def views_list(request, list_id):
 def new_list(request):
 
     list_ob = List.objects.create()
-    item = Item.objects.create(text=request.POST['item_text'], list=list_ob)
+    item = Item.objects.create(text=request.POST['text'], list=list_ob)
     
     try:
 
@@ -58,5 +58,5 @@ def new_list(request):
 def add_item(request, list_id):
     
     list_ob = List.objects.get(id=list_id)
-    Item.objects.create(text=request.POST['item_text'], list=list_ob)
+    Item.objects.create(text=request.POST['text'], list=list_ob)
     return redirect(list_ob)

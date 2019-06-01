@@ -64,7 +64,7 @@ class ListViewTest(TestCase):
 
         self.client.post(
             f'/lists/{correct_list.id}/', 
-            data={'item_text':'A new item to add to existing list'}
+            data={'text':'A new item to add to existing list'}
         )
 
         self.assertEqual(Item.objects.count(), 1)
@@ -78,7 +78,7 @@ class ListViewTest(TestCase):
         correct_list = List.objects.create()
 
         _response = self.client.post(f'/lists/{correct_list.id}/', 
-            data={'item_text':'A new item to add to existing list'}
+            data={'text':'A new item to add to existing list'}
         )
 
         self.assertRedirects(_response, f'/lists/{correct_list.id}/')
@@ -89,7 +89,7 @@ class ListViewTest(TestCase):
 
         _response = self.client.post(
             f'/lists/{list_ob.id}/', 
-            data={'item_text':''}
+            data={'text':''}
         )
 
         self.assertEqual(_response.status_code, 200)
@@ -103,7 +103,7 @@ class NewListTest(TestCase):
 
         self.client.post(
             '/lists/new',
-            data={'item_text':'A new item to add'}
+            data={'text':'A new item to add'}
         )
 
         self.assertEqual(1, Item.objects.count())
@@ -114,7 +114,7 @@ class NewListTest(TestCase):
 
         _response = self.client.post(
             '/lists/new', 
-            data={'item_text':'A new item to add'}
+            data={'text':'A new item to add'}
         )
 
         new_list = List.objects.first()
@@ -122,7 +122,7 @@ class NewListTest(TestCase):
 
     def test_validation_errors_are_sent_back_to_the_home_page(self):
 
-        _response = self.client.post('/lists/new', data={'item_text':''})
+        _response = self.client.post('/lists/new', data={'text':''})
         self.assertEqual(_response.status_code, 200)
         self.assertTemplateUsed(_response, 'home.html')
         expected_error = escape("You can't have an empty list item")
@@ -130,6 +130,6 @@ class NewListTest(TestCase):
     
     def test_invalid_list_items_are_not_saved(self):
 
-        self.client.post('/lists/new', data={'item_text':''})
+        self.client.post('/lists/new', data={'text':''})
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)

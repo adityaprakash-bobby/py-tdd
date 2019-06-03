@@ -5,7 +5,11 @@ from django.template.loader import render_to_string
 from django.utils.html import escape
 from lists.models import Item, List
 from lists.views import home_page
-from lists.forms import ItemForm, EMPTY_ITEM_ERROR
+from lists.forms import (
+    ItemForm, EMPTY_ITEM_ERROR,
+    ExistingListItemForm, DUPLICATE_ITEM_ERROR
+)
+from unittest import skip
 
 class TestForHomePage(TestCase):
 
@@ -119,6 +123,45 @@ class ListViewTest(TestCase):
         _response = self.post_invalid_input()
         self.assertContains(_response, escape(EMPTY_ITEM_ERROR))
 
+    @skip
+    def test_duplication_error_ends_up_in_the_list_page(self):
+
+        list_ob = List.objects.create()
+        Item.objects.create(text='text item', list=list_ob)
+        
+        _response = self.client.post(
+            f'/lists/{list_ob.id}/',
+            data={
+                'text': 'text item'
+        })
+
+        expected_error = escape("You've already got this in your list")
+        self.assertContains(_response, expected_error)
+        self.assertTemplateUsed('list.html')
+        self.assertEqual(Item.objects.count(), 1)
+
+class ExistingListItemFormTest(TestCase):
+
+    def test_form_renders_item_text_input(self):
+
+        list_ob = List.objects.create()
+        form = ExistingListItemForm(for_list=list_ob)
+        self.assertIn('placeholder="Enter a To-Do item"', form.as_p())
+
+    def test_form_validaton_for_empty_item(self):
+
+        list_ob = List.objects.create()
+        form = ExistingListItemForm(for_list=list_ob, data={'text':''})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['text'], [EMPTY_ITEM_ERROR])
+
+    def test_form_validation_for_duplcate_item(self):
+
+        list_ob = List.objects.create()
+        Item.objects.create(list=list_ob, text='Duplicate')
+        form = ExistingListItemForm(for_list=list_ob, data={'text':'Duplicate'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['text'], [DUPLICATE_ITEM_ERROR])
 
 class NewListTest(TestCase):
 

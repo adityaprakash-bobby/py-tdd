@@ -30,5 +30,15 @@
             {% endblock %}
         </div>
     </div>
+
+    <!-- JQuery and Custom Scripts -->
+    <script src="/static/jquery-3.4.1.min.js"></script>
+    <script src="/static/list.js"></script>
+    
+    <script>
+    $(document).ready( function () {
+        window.Superlists.initialize();
+    });
+    </script>
 </body>
 </html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>QUnit: To-Do Lists</title>
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.6.0.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+    <form>
+      <input name="text" />
+      <div class="has-error">Error Text</div>
+    </form>
+  </div>
+
+  <script src="../jquery-3.4.1.min.js"></script>
+  <script src="../list.js"></script>
+  <script src="https://code.jquery.com/qunit/qunit-2.6.0.js"></script>
+  <script>
+
+// console.log('Unit tests starts');
+
+QUnit.test("errors should be hidden on keypress", function (assert) {
+  // console.log('In test 1');
+  initialize();
+  $('input[name="text"]').trigger('keypress');
+  assert.equal($('.has-error').is(':visible'), false);
+});
+
+QUnit.test("errors aren't hidden if there is no keypress", function (assert) {
+  // console.log('In test 2');
+  initialize();
+  assert.equal($('.has-error').is(':visible'), true);
+});
+
+  </script>
+</body>
+</html>

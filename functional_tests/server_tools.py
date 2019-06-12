@@ -1,4 +1,4 @@
-from fabric.api import *
+from fabric.api import run
 from fabric.context_managers import shell_env, settings
 
 def _get_manage_dot_py(host):

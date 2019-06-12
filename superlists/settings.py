@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lists',
-    'accounts'
+    'accounts',
+    'functional_tests',
 ]
 
 # Custom authentication user model and Authentication backend

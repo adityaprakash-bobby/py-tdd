@@ -1,4 +1,4 @@
-from fabric.api import run
+from fabric.api import *
 from fabric.context_managers import shell_env, settings
 
 def _get_manage_dot_py(host):
@@ -13,14 +13,14 @@ def reset_database(host):
 
     manage_dot_py = _get_manage_dot_py(host)
 
-    with settings(host_string=f'ubuntu@{host}'):
+    with settings(host_string=f'ubuntu@{host}', key_filename = ['~/Downloads/testinggoat.pem']):
         run(f'{manage_dot_py} flush --noinput')
 
 def create_session_on_server(host, email):
 
     manage_dot_py = _get_manage_dot_py(host)
 
-    with settings(host_string=f'ubuntu@{host}'):
+    with settings(host_string=f'ubuntu@{host}', key_filename = ['~/Downloads/testinggoat.pem']):
         
         env_vars = _get_server_env_vars(host)
         

@@ -50,3 +50,6 @@ def add_item(request, list_id):
     list_ob = List.objects.get(id=list_id)
     Item.objects.create(text=request.POST['text'], list=list_ob)
     return redirect(list_ob)
+
+def my_lists(request, user_email):
+    return render(request, 'my_lists.html')

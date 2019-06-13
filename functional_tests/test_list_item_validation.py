@@ -52,9 +52,7 @@ class ListItemValidationTest(FunctionalTest):
 
         # Bob visits the home page and starts a new list
         self.browser.get(self.live_server_url)
-        self.get_item_input_box().send_keys('Buy hummus')
-        self.get_item_input_box().send_keys(Keys.ENTER)
-        self.wait_for_a_item_present_in_the_list('1: Buy hummus')
+        self.add_list_item('Buy hummus')
 
         # She accidentally tries to add another item which is already presesnt
         # in the list
@@ -71,9 +69,7 @@ class ListItemValidationTest(FunctionalTest):
 
         # Bob visits the home page and starts a new list
         self.browser.get(self.live_server_url)
-        self.get_item_input_box().send_keys('Buy hummus')
-        self.get_item_input_box().send_keys(Keys.ENTER)
-        self.wait_for_a_item_present_in_the_list('1: Buy hummus')
+        self.add_list_item('Buy hummus')
 
         # She accidentally tries to add another item which is already presesnt
         # in the list

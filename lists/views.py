@@ -39,7 +39,8 @@ def new_list(request):
     if form.is_valid():
         
         list_ob = List()
-        list_ob.owner = request.user
+        if request.user.is_authenticated:
+            list_ob.owner = request.user
         list_ob.save()
         form.save(for_list=list_ob)
 

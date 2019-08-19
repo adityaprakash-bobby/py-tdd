@@ -2,7 +2,7 @@
 
 A very minimal application made on Django, in order to deliver a heavily tested and automatically deployed To-Do lists webapp.  
 
-> "Always follow the Testing Goat."
+> "Always obey the Testing Goat."
 
 ### Get it running locally
 ```bash
